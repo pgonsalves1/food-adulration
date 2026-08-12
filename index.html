@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Really in Your Food? — Community Food Safety Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B2340;
+    --ink-soft:#3B4368;
+    --paper:#F7F1E1;
+    --paper-2:#EFE5C8;
+    --paper-3:#E4D6AE;
+    --turmeric:#E1A22C;
+    --turmeric-deep:#B87C15;
+    --chilli:#B93D1E;
+    --safe:#4C7A54;
+    --line: rgba(27,35,64,0.16);
+    --display: 'Archivo Black', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --body: 'IBM Plex Sans', sans-serif;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.5;
+  }
+  img,svg{display:block;max-width:100%;}
+  a{color:inherit;}
+
+  /* texture */
+  .grain{
+    position:fixed; inset:0; pointer-events:none; z-index:1; opacity:.035; mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:50;
+    background:var(--ink); color:var(--paper);
+    border-bottom:3px solid var(--turmeric);
+  }
+  .nav-inner{
+    max-width:1180px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-family:var(--display); font-size:15px; letter-spacing:.03em;}
+  .brand .dot{width:10px;height:10px;border-radius:50%;background:var(--turmeric);box-shadow:0 0 0 3px rgba(225,162,44,.25);}
+  nav.links{display:flex; gap:22px; font-family:var(--mono); font-size:12.5px; letter-spacing:.04em; text-transform:uppercase;}
+  nav.links a{text-decoration:none; opacity:.82; border-bottom:1px solid transparent; padding-bottom:3px;}
+  nav.links a:hover{opacity:1; border-color:var(--turmeric);}
+  .nav-toggle{display:none; background:none; border:1px solid var(--paper); color:var(--paper); font-family:var(--mono); font-size:11px; padding:6px 10px; border-radius:3px;}
+
+  @media (max-width:760px){
+    nav.links{
+      position:absolute; top:100%; left:0; right:0;
+      flex-direction:column; background:var(--ink);
+      padding:16px 24px 20px; gap:14px;
+      display:none; border-bottom:3px solid var(--turmeric);
+    }
+    nav.links.open{display:flex;}
+    .nav-toggle{display:block;}
+  }
+
+  /* ---------- hero ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    background:
+      radial-gradient(1100px 480px at 85% -10%, rgba(225,162,44,.22), transparent 60%),
+      var(--ink);
+    color:var(--paper);
+    padding:90px 24px 70px;
+  }
+  .hero-inner{max-width:1180px; margin:0 auto; display:grid; grid-template-columns:1.25fr .85fr; gap:48px; align-items:center;}
+  .eyebrow{
+    font-family:var(--mono); font-size:12.5px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--turmeric); margin:0 0 18px;
+  }
+  h1.hero-title{
+    font-family:var(--display); font-size:clamp(34px,5.4vw,62px); line-height:1.04; margin:0 0 22px;
+    letter-spacing:-.01em;
+  }
+  h1.hero-title em{font-style:normal; color:var(--turmeric);}
+  .hero p.lede{font-size:17px; max-width:52ch; color:rgba(247,241,225,.86); margin:0 0 30px;}
+  .hero-actions{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    font-family:var(--mono); font-size:13px; letter-spacing:.03em; text-transform:uppercase;
+    padding:13px 22px; border-radius:3px; text-decoration:none; display:inline-block; font-weight:600;
+    border:1px solid transparent; cursor:pointer;
+  }
+  .btn-primary{background:var(--turmeric); color:var(--ink);}
+  .btn-primary:hover{background:#f0b23e;}
+  .btn-ghost{border-color:rgba(247,241,225,.4); color:var(--paper); background:transparent;}
+  .btn-ghost:hover{border-color:var(--paper);}
+
+  .stamp-wrap{display:flex; justify-content:center;}
+  .stamp{width:230px; height:230px; animation:spin-in 900ms ease-out;}
+  @keyframes spin-in{from{transform:rotate(-25deg) scale(.85); opacity:0;} to{transform:rotate(-8deg) scale(1); opacity:1;}}
+  .stamp{transform:rotate(-8deg);}
+
+  .stat-row{max-width:1180px; margin:56px auto 0; padding:0 24px; display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line);}
+  .stat{background:var(--paper); padding:22px 20px;}
+  .stat .n{font-family:var(--display); font-size:34px; color:var(--turmeric-deep);}
+  .stat .l{font-family:var(--mono); font-size:12px; letter-spacing:.03em; color:var(--ink-soft); margin-top:4px;}
+
+  /* ---------- section shell ---------- */
+  section{padding:76px 24px;}
+  .wrap{max-width:1180px; margin:0 auto;}
+  .section-head{display:flex; align-items:flex-end; justify-content:space-between; gap:24px; margin-bottom:38px; flex-wrap:wrap; border-bottom:2px solid var(--ink); padding-bottom:16px;}
+  .section-head h2{font-family:var(--display); font-size:clamp(24px,3vw,34px); margin:0; letter-spacing:-.01em;}
+  .section-head .tag{font-family:var(--mono); font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:var(--ink-soft); max-width:34ch; text-align:right;}
+  .reveal{opacity:0; transform:translateY(18px); transition:opacity .55s ease, transform .55s ease;}
+  .reveal.in{opacity:1; transform:none;}
+
+  /* about */
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:44px;}
+  .about-grid p{font-size:16px; color:var(--ink-soft); margin:0 0 16px;}
+  .callout{background:var(--paper-2); border-left:4px solid var(--chilli); padding:18px 20px; font-size:14.5px;}
+  .callout b{color:var(--chilli);}
+
+  /* adulterant cards */
+  .card-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:16px;}
+  .a-card{
+    background:var(--paper-2); border:1px solid var(--line); border-radius:6px; padding:20px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .a-card .food{font-family:var(--display); font-size:17px;}
+  .a-card .badge{align-self:flex-start; font-family:var(--mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; background:var(--chilli); color:var(--paper); padding:3px 8px; border-radius:3px;}
+  .a-card .with{font-family:var(--mono); font-size:12.5px; color:var(--ink-soft); line-height:1.6;}
+  .a-card .with b{color:var(--ink);}
+
+  /* tests */
+  .test-list{display:grid; gap:12px;}
+  .test-card{
+    background:var(--paper-2); border:1px solid var(--line); border-radius:6px; overflow:hidden;
+  }
+  .test-head{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding:18px 22px; cursor:pointer; user-select:none;
+  }
+  .test-head .th-left{display:flex; align-items:baseline; gap:14px;}
+  .test-num{font-family:var(--mono); font-size:12px; color:var(--turmeric-deep); font-weight:600;}
+  .test-title{font-family:var(--display); font-size:16px;}
+  .test-chevron{font-family:var(--mono); font-size:18px; transition:transform .25s ease; color:var(--ink-soft);}
+  .test-card.open .test-chevron{transform:rotate(45deg);}
+  .test-body{max-height:0; overflow:hidden; transition:max-height .35s ease;}
+  .test-card.open .test-body{max-height:420px;}
+  .test-body-inner{padding:0 22px 22px; display:grid; grid-template-columns:1.4fr 1fr; gap:22px; align-items:start;}
+  .method b{font-family:var(--mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); display:block; margin-bottom:6px;}
+  .method p{margin:0; font-size:14.5px; color:var(--ink);}
+  .reveal-btn{
+    font-family:var(--mono); font-size:11.5px; text-transform:uppercase; letter-spacing:.05em;
+    background:none; border:1px dashed var(--ink-soft); border-radius:3px; padding:9px 12px; cursor:pointer; margin-top:14px;
+  }
+  .result-box{position:relative; min-height:110px; border:1px solid var(--line); border-radius:6px; background:var(--paper); padding:14px; display:flex; align-items:center; justify-content:center;}
+  .result-stamp{display:none; text-align:center; animation:stamp-in .4s cubic-bezier(.2,1.4,.4,1);}
+  .result-stamp.show{display:block;}
+  @keyframes stamp-in{from{transform:scale(1.6) rotate(-14deg); opacity:0;} to{transform:scale(1) rotate(-6deg); opacity:1;}}
+  .result-stamp .r-label{font-family:var(--display); font-size:15px; border:3px solid var(--chilli); color:var(--chilli); padding:8px 14px; border-radius:4px; display:inline-block; transform:rotate(-6deg);}
+  .result-stamp p{font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); margin:10px 0 0;}
+  .result-placeholder{font-family:var(--mono); font-size:12px; color:var(--ink-soft); text-align:center;}
+
+  @media (max-width:640px){
+    .test-body-inner{grid-template-columns:1fr;}
+    .hero-inner{grid-template-columns:1fr;}
+    .stamp-wrap{order:-1;}
+    .about-grid{grid-template-columns:1fr;}
+    .stat-row{grid-template-columns:1fr;}
+  }
+
+  /* risks */
+  .risk-strip{background:var(--ink); color:var(--paper); border-radius:8px; padding:40px; display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:28px;}
+  .risk{border-left:2px solid var(--turmeric); padding-left:16px;}
+  .risk h3{font-family:var(--display); font-size:15px; margin:0 0 8px; color:var(--turmeric);}
+  .risk p{font-size:13.5px; color:rgba(247,241,225,.82); margin:0;}
+
+  /* report */
+  .report-grid{display:grid; grid-template-columns:1fr 1fr; gap:20px;}
+  .report-card{background:var(--paper-2); border:1px solid var(--line); border-radius:6px; padding:24px;}
+  .report-card h3{font-family:var(--display); font-size:16px; margin:0 0 10px;}
+  .report-card p{font-size:14px; color:var(--ink-soft); margin:0 0 14px;}
+  .hotline{font-family:var(--mono); font-size:22px; font-weight:600; color:var(--chilli); letter-spacing:.02em;}
+  .steps{margin:0; padding-left:18px; font-size:13.5px; color:var(--ink-soft); display:grid; gap:6px;}
+
+  /* engage */
+  .engage{background:var(--paper-3); border-radius:8px; padding:40px; display:grid; grid-template-columns:1fr 1fr; gap:36px; align-items:center;}
+  .engage h2{font-family:var(--display); font-size:26px; margin:0 0 14px;}
+  .engage p{font-size:15px; color:var(--ink-soft); margin:0 0 20px;}
+  .checklist{list-style:none; margin:0; padding:0; display:grid; gap:10px;}
+  .checklist li{display:flex; gap:10px; font-size:14px; align-items:flex-start;}
+  .checklist li::before{content:"✓"; font-family:var(--mono); font-weight:700; color:var(--safe); flex:none;}
+
+  footer{padding:30px 24px 50px; text-align:center;}
+  footer p{font-family:var(--mono); font-size:11.5px; color:var(--ink-soft); max-width:60ch; margin:0 auto;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    .reveal, .stamp, .result-stamp{animation:none !important; transition:none !important; opacity:1 !important; transform:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="grain"></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand"><span class="dot"></span>FOOD SAFETY CHECK</div>
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">MENU</button>
+    <nav class="links" id="navLinks">
+      <a href="#about">What Is It</a>
+      <a href="#adulterants">Common Culprits</a>
+      <a href="#tests">Home Tests</a>
+      <a href="#risks">Health Risks</a>
+      <a href="#report">Report It</a>
+      <a href="#engage">Run A Session</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <p class="eyebrow">Community Food Safety Programme</p>
+      <h1 class="hero-title">What's actually<br>in your <em>dal</em>,<br>your milk, your masala?</h1>
+      <p class="lede">Food adulteration is the deliberate mixing of cheap, often harmful substances into everyday food to cut cost or fake quality. It's quiet, it's common, and it's testable — at home, in minutes, with things already in your kitchen.</p>
+      <div class="hero-actions">
+        <a href="#tests" class="btn btn-primary">Try a home test</a>
+        <a href="#report" class="btn btn-ghost">How to report it</a>
+      </div>
+    </div>
+    <div class="stamp-wrap">
+      <svg class="stamp" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="100" cy="100" r="92" fill="none" stroke="#E1A22C" stroke-width="3"/>
+        <circle cx="100" cy="100" r="80" fill="none" stroke="#E1A22C" stroke-width="1"/>
+        <path id="stampCircle" d="M 100,20 A 80,80 0 1 1 99.9,20" fill="none"/>
+        <text font-family="IBM Plex Mono" font-size="10.5" letter-spacing="2" fill="#F7F1E1">
+          <textPath href="#stampCircle" startOffset="2%">• KNOW YOUR FOOD • TEST IT • TRUST IT •</textPath>
+        </text>
+        <text x="100" y="94" text-anchor="middle" font-family="Archivo Black" font-size="22" fill="#F7F1E1">INSPECT</text>
+        <text x="100" y="118" text-anchor="middle" font-family="Archivo Black" font-size="22" fill="#E1A22C">BEFORE</text>
+        <text x="100" y="142" text-anchor="middle" font-family="Archivo Black" font-size="22" fill="#F7F1E1">YOU EAT</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="stat-row">
+    <div class="stat"><div class="n">50+</div><div class="l">Quick DART tests published by FSSAI for household use</div></div>
+    <div class="stat"><div class="n">10</div><div class="l">Everyday foods covered in this guide, from milk to honey</div></div>
+    <div class="stat"><div class="n">1800-11-2100</div><div class="l">FSSAI toll-free food safety helpline, India</div></div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>What counts as adulteration</h2>
+      <div class="tag">Not spoilage. Not an accident. A substitution.</div>
+    </div>
+    <div class="about-grid reveal">
+      <div>
+        <p>Food adulteration is when a substance is added, removed, or substituted to make a product look bigger, brighter, heavier, or cheaper to produce — without the buyer's knowledge. It ranges from watering down milk to mixing industrial dye into turmeric.</p>
+        <p>It thrives on invisibility: adulterated food usually looks, and often tastes, completely normal. That's exactly why a five-minute kitchen test matters more than a glance at the package.</p>
+      </div>
+      <div class="callout">
+        <b>Why community programmes matter:</b> a single household test protects one family. A neighbourhood that knows the tests — and knows the local vendor, dairy, and grocer — makes adulteration far less profitable to attempt in the first place.
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="adulterants" style="background:var(--paper-2);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Ten common culprits</h2>
+      <div class="tag">Food · what it's cut with</div>
+    </div>
+    <div class="card-grid reveal">
+      <div class="a-card"><span class="badge">Dairy</span><div class="food">Milk</div><div class="with">Cut with <b>water</b>, <b>starch</b>, or <b>detergent</b> to add volume or fake thickness.</div></div>
+      <div class="a-card"><span class="badge">Spice</span><div class="food">Turmeric powder</div><div class="with">Coloured with <b>lead chromate</b> or metanil yellow dye for a brighter yellow.</div></div>
+      <div class="a-card"><span class="badge">Spice</span><div class="food">Chilli powder</div><div class="with">Bulked with <b>brick powder</b> or coloured with non-food <b>red dye</b>.</div></div>
+      <div class="a-card"><span class="badge">Pantry</span><div class="food">Sugar</div><div class="with">Mixed with <b>chalk powder</b> for extra weight.</div></div>
+      <div class="a-card"><span class="badge">Pantry</span><div class="food">Honey</div><div class="with">Diluted with <b>sugar syrup</b> to stretch the jar.</div></div>
+      <div class="a-card"><span class="badge">Beverage</span><div class="food">Coffee powder</div><div class="with">Diluted with <b>chicory</b> or tamarind seed powder.</div></div>
+      <div class="a-card"><span class="badge">Pulses</span><div class="food">Dal / lentils</div><div class="with">Coated in <b>metanil yellow</b> dye to look fresher.</div></div>
+      <div class="a-card"><span class="badge">Oil</span><div class="food">Mustard oil</div><div class="with">Cut with cheap <b>argemone oil</b> — genuinely dangerous, not just low quality.</div></div>
+      <div class="a-card"><span class="badge">Fat</span><div class="food">Ghee</div><div class="with">Extended with <b>vanaspati</b> (hydrogenated fat) sold at pure-ghee prices.</div></div>
+      <div class="a-card"><span class="badge">Beverage</span><div class="food">Tea leaves</div><div class="with">Reused, spent leaves re-dyed and re-dried, then resold as fresh.</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="tests">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Run the test yourself</h2>
+      <div class="tag">Tap a test to open it, then reveal what a positive result looks like</div>
+    </div>
+    <div class="test-list reveal" id="testList">
+
+      <div class="test-card">
+        <div class="test-head"><div class="th-left"><span class="test-num">01</span><span class="test-title">Water in milk — the slant test</span></div><span class="test-chevron">+</span></div>
+        <div class="test-body"><div class="test-body-inner">
+          <div class="method"><b>Method</b><p>Let a drop of milk fall onto a polished, slightly tilted surface, like a steel plate.</p></div>
+          <div class="result-box">
+            <button class="reveal-btn">Show result</button>
+            <div class="result-stamp"><span class="r-label">DILUTED</span><p>Runs quickly, leaves no trail. Pure milk flows slowly and leaves a thin white streak.</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-head"><div class="th-left"><span class="test-num">02</span><span class="test-title">Starch in milk — the iodine test</span></div><span class="test-chevron">+</span></div>
+        <div class="test-body"><div class="test-body-inner">
+          <div class="method"><b>Method</b><p>Add two drops of iodine tincture to a small sample of milk in a clear glass.</p></div>
+          <div class="result-box">
+            <button class="reveal-btn">Show result</button>
+            <div class="result-stamp"><span class="r-label">STARCH FOUND</span><p>Colour turns blue. Pure milk keeps the iodine's original amber-brown colour.</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-head"><div class="th-left"><span class="test-num">03</span><span class="test-title">Detergent in milk — the shake test</span></div><span class="test-chevron">+</span></div>
+        <div class="test-body"><div class="test-body-inner">
+          <div class="method"><b>Method</b><p>Mix equal parts milk and water in a bottle, close it, and shake well for a few seconds.</p></div>
+          <div class="result-box">
+            <button class="reveal-btn">Show result</button>
+            <div class="result-stamp"><span class="r-label">DETERGENT FOUND</span><p>Thick, soapy, long-lasting foam forms. Pure milk produces only a thin, quickly-settling layer.</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-head"><div class="th-left"><span class="test-num">04</span><span class="test-title">Dye in turmeric powder</span></div><span class="test-chevron">+</span></div>
+        <div class="test-body"><div class="test-body-inner">
+          <div class="method"><b>Method</b><p>Sprinkle a pinch of turmeric powder onto a glass of plain water and let it sit, undisturbed.</p></div>
+          <div class="result-box">
+            <button class="reveal-btn">Show result</button>
+            <div class="result-stamp"><span class="r-label">DYED</span><p>Water instantly turns bright orange-red. Pure turmeric colours the water slowly and mildly.</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-head"><div class="th-left"><span class="test-num">05</span><span class="test-title">Artificial colour in chilli powder</span></div><span class="test-chevron">+</span></div>
+        <div class="test-body"><div class="test-body-inner">
+          <div class="method"><b>Method</b><p>Sprinkle a pinch of chilli powder onto the surface of a glass of water.</p></div>
+          <div class="result-box">
+            <button class="reveal-btn">Show result</button>
+            <div class="result-stamp"><span class="r-label">DYED</span><p>A streak of colour bleeds off immediately. Pure powder floats and colours the water only gradually.</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-head"><div class="th-left"><span class="test-num">06</span><span class="test-title">Chalk powder in sugar</span></div><span class="test-chevron">+</span></div>
+        <div class="test-body"><div class="test-body-inner">
+          <div class="method"><b>Method</b><p>Dissolve a spoon of sugar completely in a glass of water and let it stand for a minute.</p></div>
+          <div class="result-box">
+            <button class="reveal-btn">Show result</button>
+            <div class="result-stamp"><span class="r-label">CHALK FOUND</span><p>A white, gritty layer settles at the bottom. Pure sugar dissolves fully, leaving clear water.</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-head"><div class="th-left"><span class="test-num">07</span><span class="test-title">Sugar syrup in honey</span></div><span class="test-chevron">+</span></div>
+        <div class="test-body"><div class="test-body-inner">
+          <div class="method"><b>Method</b><p>Drop a spoon of honey gently into a glass of water without stirring.</p></div>
+          <div class="result-box">
+            <button class="reveal-btn">Show result</button>
+            <div class="result-stamp"><span class="r-label">DILUTED</span><p>It dissolves quickly, clouding the water. Pure honey stays mostly intact and settles as a lump.</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-head"><div class="th-left"><span class="test-num">08</span><span class="test-title">Chicory in coffee powder</span></div><span class="test-chevron">+</span></div>
+        <div class="test-body"><div class="test-body-inner">
+          <div class="method"><b>Method</b><p>Sprinkle a pinch of coffee powder onto the surface of a glass of water and watch closely.</p></div>
+          <div class="result-box">
+            <button class="reveal-btn">Show result</button>
+            <div class="result-stamp"><span class="r-label">CHICORY FOUND</span><p>Chicory sinks fast, leaving a brown trail. Pure coffee floats on the surface for longer.</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-head"><div class="th-left"><span class="test-num">09</span><span class="test-title">Dye on dal / lentils</span></div><span class="test-chevron">+</span></div>
+        <div class="test-body"><div class="test-body-inner">
+          <div class="method"><b>Method</b><p>Rub a small handful of dal between your wet palms for a few seconds.</p></div>
+          <div class="result-box">
+            <button class="reveal-btn">Show result</button>
+            <div class="result-stamp"><span class="r-label">DYED</span><p>Colour transfers onto your palms. Undyed dal leaves your hands clean.</p></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="test-card">
+        <div class="test-head"><div class="th-left"><span class="test-num">10</span><span class="test-title">Impurities in food grains</span></div><span class="test-chevron">+</span></div>
+        <div class="test-body"><div class="test-body-inner">
+          <div class="method"><b>Method</b><p>Spread a small quantity of grains thinly on a clean, transparent glass plate and look closely.</p></div>
+          <div class="result-box">
+            <button class="reveal-btn">Show result</button>
+            <div class="result-stamp"><span class="r-label">CONTAMINATED</span><p>Visible stones, dust, husk, or mismatched grains stand out. Pure grain looks uniform in size and colour.</p></div>
+          </div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="risks" style="background:var(--paper-2);">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Why this isn't just a quality issue</h2>
+      <div class="tag">Adulterants are chosen to be cheap and invisible — not to be safe</div>
+    </div>
+    <div class="risk-strip reveal">
+      <div class="risk"><h3>Digestive & organ damage</h3><p>Chalk, brick powder, and industrial dyes are not designed to be eaten. Regular exposure strains the gut, liver, and kidneys.</p></div>
+      <div class="risk"><h3>Long-term toxicity</h3><p>Lead chromate and metanil yellow accumulate in the body over time and are linked to serious long-term health effects.</p></div>
+      <div class="risk"><h3>Epidemic dropsy</h3><p>Argemone oil in mustard oil has triggered documented outbreaks of this severe, sometimes fatal condition in India.</p></div>
+      <div class="risk"><h3>Higher risk for children</h3><p>Children, pregnant women, and the elderly are more vulnerable to the same dose that a healthy adult might tolerate.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="report">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <h2>Found something adulterated?</h2>
+      <div class="tag">Don't just stop buying it — report it</div>
+    </div>
+    <div class="report-grid reveal">
+      <div class="report-card">
+        <h3>Call the FSSAI helpline</h3>
+        <p>Toll-free, for any food safety complaint anywhere in India.</p>
+        <div class="hotline">1800-11-2100</div>
+      </div>
+      <div class="report-card">
+        <h3>File it properly</h3>
+        <ol class="steps">
+          <li>Stop using the product immediately.</li>
+          <li>Keep the bill, packaging, and a sample if possible.</li>
+          <li>Note the brand, batch number, and manufacturing date.</li>
+          <li>File a complaint via FSSAI's Food Safety Connect portal or your local Food Safety Officer.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="engage">
+  <div class="wrap">
+    <div class="engage reveal">
+      <div>
+        <h2>Bringing this to your community</h2>
+        <p>This guide is built to run as a live session — a housing-society meeting, a market-day stall, or a school programme. Bring the ingredients, run the tests in front of people, and let the results speak.</p>
+        <a href="#tests" class="btn btn-primary">Jump to the test list</a>
+      </div>
+      <ul class="checklist">
+        <li>Set up a "live lab" table: milk, iodine, turmeric, chilli powder, sugar, honey, water, clear glasses.</li>
+        <li>Run 3–4 tests live and let attendees try the next one themselves.</li>
+        <li>Hand out a printed version of the ten tests as a take-home reference.</li>
+        <li>Share the FSSAI helpline number on a poster near the exit.</li>
+        <li>Close with a short pledge: check one staple food a week for a month.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Community food safety awareness guide. Home tests are indicative screening only, not laboratory confirmation — when in doubt, report the product rather than relying solely on a home test. Based on FSSAI's DART (Detect Adulteration with Rapid Test) initiative.</p>
+</footer>
+
+<script>
+  // mobile nav
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // accordion
+  document.querySelectorAll('.test-head').forEach(head => {
+    head.addEventListener('click', () => {
+      const card = head.closest('.test-card');
+      const wasOpen = card.classList.contains('open');
+      document.querySelectorAll('.test-card.open').forEach(c => c !== card && c.classList.remove('open'));
+      card.classList.toggle('open', !wasOpen);
+    });
+  });
+
+  // reveal result stamp
+  document.querySelectorAll('.reveal-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const box = btn.closest('.result-box');
+      box.querySelector('.result-stamp').classList.add('show');
+      btn.style.display = 'none';
+    });
+  });
+
+  // scroll reveal
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(en => { if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+  }, {threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
